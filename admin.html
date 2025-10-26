@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Админ-панель | Tbil Home Hostel</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Стили и остальной HTML без изменений -->
+    <style>
+        /* --- Основные стили из оригинального файла --- */
+        :root {
+            --primary: #046bd2;
+            --primary-dark: #045cb4;
+            --danger: #dc3545;
+            --danger-dark: #c82333;
+            --success: #28a745;
+            --text-dark: #1e293b;
+            --text-medium: #334155;
+            --light-bg: #f9fafb;
+            --white: #ffffff;
+            --border: #e2e8f0;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --radius: 8px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text-medium);
+            line-height: 1.6;
+            background-color: var(--light-bg);
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            color: var(--text-dark);
+            font-weight: 600;
+            line-height: 1.3;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--primary);
+            color: var(--white);
+            padding: 10px 24px;
+            border-radius: var(--radius);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        .btn-danger { background-color: var(--danger); }
+        .btn-danger:hover { background-color: var(--danger-dark); }
+        .btn-success { background-color: var(--success); }
+
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 500; }
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-family: 'Inter', sans-serif;
+            transition: var(--transition);
+        }
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(4, 107, 210, 0.1);
+        }
+        
+        .card {
+            background-color: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 25px;
+        }
+        
+        /* --- Стили макета админ-панели (Mobile-First) --- */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 260px;
+            height: 100%;
+            background-color: var(--text-dark);
+            color: var(--white);
+            padding: 30px 20px;
+            z-index: 1100;
+            transform: translateX(-100%); /* Скрыто по умолчанию */
+            transition: transform 0.3s ease-in-out;
+        }
+        .sidebar.open {
+            transform: translateX(0);
+        }
+
+        .sidebar-header { text-align: center; margin-bottom: 40px; }
+        .sidebar-header .logo { font-size: 1.5rem; font-weight: 700; color: var(--white); text-decoration: none; }
+        .sidebar-header .logo i { margin-right: 10px; }
+
+        .sidebar-nav ul { list-style: none; }
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            color: var(--white);
+            text-decoration: none;
+            padding: 12px 15px;
+            border-radius: var(--radius);
+            margin-bottom: 5px;
+            transition: var(--transition);
+            opacity: 0.8;
+        }
+        .sidebar-nav a:hover, .sidebar-nav a.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            opacity: 1;
+        }
+        .sidebar-nav a i { margin-right: 15px; width: 20px; text-align: center; }
+
+        .top-bar {
+            position: sticky;
+            top: 0;
+            display: flex;
+            align-items: center;
+            background-color: var(--white);
+            padding: 15px 20px;
+            box-shadow: var(--shadow);
+            z-index: 1000;
+        }
+        .menu-toggle {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-dark);
+            cursor: pointer;
+            margin-right: 15px;
+        }
+        .top-bar-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .main-content {
+            padding: 20px;
+        }
+
+        .page-header {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .page-header h1 { font-size: 1.8rem; }
+
+        .content-section { display: none; }
+        .content-section.active { display: block; }
+        
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1050;
+        }
+        .overlay.active {
+            display: block;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border); }
+        th { background-color: var(--light-bg); font-weight: 600; color: var(--text-dark); }
+        td .actions { display: flex; gap: 10px; }
+        td .actions .btn { padding: 5px 10px; font-size: 0.9rem; }
+        
+        /* --- Стили для десктопа (экраны шире 992px) --- */
+        @media (min-width: 992px) {
+            .admin-layout {
+                display: flex;
+            }
+            .sidebar {
+                position: relative; /* Возвращаем в поток документа */
+                transform: translateX(0); /* Всегда видимо */
+                flex-shrink: 0;
+            }
+            .top-bar, .overlay {
+                display: none; /* Скрываем мобильные элементы */
+            }
+            .main-content {
+                flex-grow: 1;
+                padding: 40px;
+                height: 100vh;
+                overflow-y: auto;
+            }
+            .page-header {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 30px;
+            }
+            .page-header h1 { font-size: 2rem; }
+        }
+
+        /* Modal Styles (без изменений) */
+        .modal { display: none; position: fixed; z-index: 1001; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.5); }
+        .modal-content { background-color: var(--white); margin: 10% auto; padding: 30px; border-radius: var(--radius); width: 90%; max-width: 600px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .close-btn { color: #aaa; font-size: 28px; font-weight: bold; cursor: pointer; }
+        .close-btn:hover { color: var(--text-dark); }
+        
+        /* Gallery Styles (без изменений) */
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; }
+        .gallery-card { position: relative; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
+        .gallery-card img { width: 100%; height: 120px; object-fit: cover; display: block; }
+        .gallery-card .delete-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); color: white; display: flex; justify-content: center; align-items: center; opacity: 0; transition: var(--transition); cursor: pointer; }
+        .gallery-card:hover .delete-overlay { opacity: 1; }
+    </style>
+</head>
+<body>
+
+    <div class="admin-layout">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="#" class="logo"><i class="fas fa-shield-alt"></i> Tbil Admin</a>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="#rooms" class="nav-link active"><i class="fas fa-bed"></i> Номера</a></li>
+                    <li><a href="#bookings" class="nav-link"><i class="fas fa-calendar-check"></i> Бронирования</a></li>
+                    <li><a href="#about" class="nav-link"><i class="fas fa-info-circle"></i> О нас</a></li>
+                    <li><a href="#gallery" class="nav-link"><i class="fas fa-images"></i> Галерея</a></li>
+                    <li style="margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;">
+                        <!-- ИЗМЕНЕНИЕ: Добавлена ссылка для возврата на сайт -->
+                        <a href="index.html" target="_blank"><i class="fas fa-globe"></i> Посмотреть сайт</a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Основной контент и JS остаются без изменений -->
+        <div class="content-wrapper">
+            <header class="top-bar">
+                <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
+                <h2 class="top-bar-title" id="topBarTitle">Управление номерами</h2>
+            </header>
+            <main class="main-content">
+                <section id="rooms" class="content-section active">
+                    <div class="page-header">
+                        <h1>Управление номерами</h1>
+                        <button class="btn" id="addRoomBtn"><i class="fas fa-plus"></i> Добавить номер</button>
+                    </div>
+                    <div class="card">
+                        <div style="overflow-x: auto;">
+                            <table id="roomsTable">
+                                <thead><tr><th>Название</th><th>Цена (GEL)</th><th>Действия</th></tr></thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+                <section id="bookings" class="content-section">
+                    <div class="page-header"><h1>Просмотр бронирований</h1></div>
+                    <div class="card">
+                        <div style="overflow-x: auto;">
+                            <table id="bookingsTable">
+                                <thead><tr><th>ID</th><th>Номер</th><th>Имя гостя</th><th>Дата заезда</th></tr></thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+                <section id="about" class="content-section">
+                    <div class="page-header"><h1>Редактирование "О нас"</h1></div>
+                    <div class="card">
+                        <form id="aboutForm">
+                            <div class="form-group">
+                                <label for="aboutText">Текст на странице "О нас"</label>
+                                <textarea id="aboutText" rows="10" class="form-control"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Сохранить</button>
+                        </form>
+                    </div>
+                </section>
+                <section id="gallery" class="content-section">
+                    <div class="page-header"><h1>Управление галереей</h1></div>
+                    <div class="card">
+                        <form id="galleryForm" class="form-group">
+                            <label for="galleryImageUrl">URL нового изображения</label>
+                            <input type="url" id="galleryImageUrl" class="form-control" placeholder="https://example.com/image.jpg" required>
+                            <button type="submit" class="btn" style="margin-top: 10px;"><i class="fas fa-plus"></i> Добавить</button>
+                        </form>
+                        <hr style="margin: 30px 0; border: none; border-top: 1px solid var(--border);">
+                        <div id="galleryGrid" class="gallery-grid"></div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+    <div class="overlay" id="overlay"></div>
+    <div id="roomModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Добавить номер</h2>
+                <span class="close-btn">&times;</span>
+            </div>
+            <form id="roomForm">
+                <input type="hidden" id="roomId">
+                <div class="form-group"><label for="roomTitle">Название номера</label><input type="text" id="roomTitle" class="form-control" required></div>
+                <div class="form-group"><label for="roomPrice">Цена (GEL)</label><input type="number" id="roomPrice" class="form-control" required></div>
+                <div class="form-group"><label for="roomDescription">Описание (через запятую)</label><input type="text" id="roomDescription" class="form-control" placeholder="4 кровати, Общая ванная..."></div>
+                <div class="form-group"><label for="roomImage">URL изображения</label><input type="url" id="roomImage" class="form-control" placeholder="https://..." required></div>
+                <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Сохранить</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Весь JS остается без изменений -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const DB = {
+                get: (key) => JSON.parse(localStorage.getItem(key)) || [],
+                set: (key, data) => localStorage.setItem(key, JSON.stringify(data)),
+                init: () => {
+                    if (!localStorage.getItem('rooms')) {
+                        DB.set('rooms', [
+                            { id: 1, title: 'Mix Dorm 4 People', price: 45, description: '4 кровати, Общая ванная, Кондиционер, TV, WiFi', image: 'https://tbilhome.com/wp-content/uploads/2023/01/Family.jpg' },
+                            { id: 2, title: 'Mix Dorm 16 People', price: 30, description: '16 кроватей, Общая ванная, Кондиционер, TV, WiFi', image: 'https://tbilhome.com/wp-content/uploads/2023/01/20190413_101448-scaled.jpg' },
+                            { id: 3, title: "Women's Dormitory", price: 40, description: '8 кроватей, Общая ванная, Кондиционер, Только для женщин, WiFi', image: 'https://tbilhome.com/wp-content/uploads/2023/01/mens-scaled.jpg' }
+                        ]);
+                    }
+                    if (!localStorage.getItem('bookings')) {
+                        DB.set('bookings', [
+                            { id: 1, roomId: 2, userName: 'Ivan Ivanov', checkInDate: '2024-08-15' },
+                            { id: 2, roomId: 3, userName: 'Maria Petrova', checkInDate: '2024-08-18' }
+                        ]);
+                    }
+                    if (!localStorage.getItem('about')) {
+                        localStorage.setItem('about', "Hostel \"Tbilhome\" is located in the historical center of Tbilisi...");
+                    }
+                    if (!localStorage.getItem('gallery')) {
+                        DB.set('gallery', [
+                            { id: 1, url: 'https://tbilhome.com/wp-content/uploads/2023/01/3.jpeg' },
+                            { id: 2, url: 'https://tbilhome.com/wp-content/uploads/2023/01/4.jpeg' },
+                            { id: 3, url: 'https://tbilhome.com/wp-content/uploads/2023/01/5.jpeg' },
+                            { id: 4, url: 'https://tbilhome.com/wp-content/uploads/2023/01/6.jpg' }
+                        ]);
+                    }
+                }
+            };
+            DB.init();
+
+            const menuToggle = document.getElementById('menuToggle');
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+            const topBarTitle = document.getElementById('topBarTitle');
+
+            const closeMenu = () => {
+                sidebar.classList.remove('open');
+                overlay.classList.remove('active');
+            };
+
+            menuToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('open');
+                overlay.classList.toggle('active');
+            });
+
+            overlay.addEventListener('click', closeMenu);
+
+            const navLinks = document.querySelectorAll('.nav-link');
+            const contentSections = document.querySelectorAll('.content-section');
+
+            const switchPage = (hash) => {
+                const activeLink = document.querySelector(`.nav-link[href="${hash}"]`);
+                if (activeLink) {
+                    navLinks.forEach(link => link.classList.remove('active'));
+                    activeLink.classList.add('active');
+                    topBarTitle.textContent = activeLink.textContent;
+                }
+                contentSections.forEach(section => section.classList.toggle('active', `#${section.id}` === hash));
+            };
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetHash = e.currentTarget.hash;
+                    if (!targetHash) return;
+                    window.location.hash = targetHash;
+                    switchPage(targetHash);
+                    if (window.innerWidth < 992) {
+                        closeMenu();
+                    }
+                });
+            });
+
+            const roomsTableBody = document.querySelector('#roomsTable tbody');
+            const roomModal = document.getElementById('roomModal');
+            const roomForm = document.getElementById('roomForm');
+            const addRoomBtn = document.getElementById('addRoomBtn');
+            const closeModalBtn = document.querySelector('.modal .close-btn');
+            const modalTitle = document.getElementById('modalTitle');
+
+            const renderRooms = () => {
+                const rooms = DB.get('rooms');
+                roomsTableBody.innerHTML = rooms.map(room => `
+                    <tr>
+                        <td>${room.title}</td>
+                        <td>${room.price}</td>
+                        <td class="actions">
+                            <button class="btn" onclick="editRoom(${room.id})"><i class="fas fa-edit"></i></button>
+                            <button class="btn btn-danger" onclick="deleteRoom(${room.id})"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `).join('');
+            };
+
+            window.editRoom = (id) => {
+                const room = DB.get('rooms').find(r => r.id === id);
+                if (!room) return;
+                modalTitle.textContent = 'Редактировать номер';
+                document.getElementById('roomId').value = room.id;
+                document.getElementById('roomTitle').value = room.title;
+                document.getElementById('roomPrice').value = room.price;
+                document.getElementById('roomDescription').value = room.description;
+                document.getElementById('roomImage').value = room.image;
+                roomModal.style.display = 'block';
+            };
+
+            window.deleteRoom = (id) => {
+                if (!confirm('Вы уверены?')) return;
+                DB.set('rooms', DB.get('rooms').filter(r => r.id !== id));
+                renderRooms();
+            };
+
+            addRoomBtn.onclick = () => {
+                modalTitle.textContent = 'Добавить номер';
+                roomForm.reset();
+                document.getElementById('roomId').value = '';
+                roomModal.style.display = 'block';
+            };
+
+            closeModalBtn.onclick = () => roomModal.style.display = 'none';
+            window.onclick = (event) => {
+                if (event.target == roomModal) roomModal.style.display = 'none';
+            };
+
+            roomForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const id = document.getElementById('roomId').value;
+                const roomData = {
+                    id: id ? parseInt(id) : Date.now(),
+                    title: document.getElementById('roomTitle').value,
+                    price: parseFloat(document.getElementById('roomPrice').value),
+                    description: document.getElementById('roomDescription').value,
+                    image: document.getElementById('roomImage').value
+                };
+                let rooms = DB.get('rooms');
+                if (id) {
+                    rooms = rooms.map(r => r.id === parseInt(id) ? roomData : r);
+                } else {
+                    rooms.push(roomData);
+                }
+                DB.set('rooms', rooms);
+                renderRooms();
+                roomModal.style.display = 'none';
+            });
+
+            const bookingsTableBody = document.querySelector('#bookingsTable tbody');
+            const renderBookings = () => {
+                const bookings = DB.get('bookings');
+                const rooms = DB.get('rooms');
+                bookingsTableBody.innerHTML = bookings.map(booking => {
+                    const room = rooms.find(r => r.id === booking.roomId);
+                    return `<tr>
+                        <td>${booking.id}</td>
+                        <td>${room ? room.title : 'N/A'}</td>
+                        <td>${booking.userName}</td>
+                        <td>${booking.checkInDate}</td>
+                    </tr>`;
+                }).join('');
+            };
+
+            const aboutForm = document.getElementById('aboutForm');
+            const aboutText = document.getElementById('aboutText');
+            const renderAbout = () => { aboutText.value = localStorage.getItem('about') || ''; };
+            aboutForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                localStorage.setItem('about', aboutText.value);
+                alert('Секция "О нас" обновлена!');
+            });
+
+            const galleryForm = document.getElementById('galleryForm');
+            const galleryGrid = document.getElementById('galleryGrid');
+            const galleryImageUrl = document.getElementById('galleryImageUrl');
+            const renderGallery = () => {
+                galleryGrid.innerHTML = DB.get('gallery').map(image => `
+                    <div class="gallery-card">
+                        <img src="${image.url}" alt="Gallery Image">
+                        <div class="delete-overlay" onclick="deleteGalleryImage(${image.id})">
+                            <i class="fas fa-trash fa-2x"></i>
+                        </div>
+                    </div>
+                `).join('');
+            };
+
+            window.deleteGalleryImage = (id) => {
+                if (!confirm('Удалить изображение?')) return;
+                DB.set('gallery', DB.get('gallery').filter(img => img.id !== id));
+                renderGallery();
+            };
+
+            galleryForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const images = DB.get('gallery');
+                images.push({ id: Date.now(), url: galleryImageUrl.value });
+                DB.set('gallery', images);
+                renderGallery();
+                galleryForm.reset();
+            });
+
+            const initialHash = window.location.hash || '#rooms';
+            switchPage(initialHash);
+            renderRooms();
+            renderBookings();
+            renderAbout();
+            renderGallery();
+        });
+    </script>
+</body>
+</html>
