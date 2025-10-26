@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход в панель управления</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #046bd2;
+            --text-dark: #1e293b;
+            --text-medium: #334155;
+            --light-bg: #f9fafb;
+            --white: #ffffff;
+            --border: #e2e8f0;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --radius: 8px;
+            --transition: all 0.3s ease;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--light-bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .login-card {
+            background-color: var(--white);
+            padding: 40px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        .login-card h1 {
+            color: var(--text-dark);
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            font-family: 'Inter', sans-serif;
+        }
+        .btn {
+            display: inline-block;
+            background-color: var(--primary);
+            color: var(--white);
+            padding: 12px 28px;
+            border-radius: var(--radius);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1rem;
+        }
+        .error-message {
+            color: #dc3545;
+            margin-top: 15px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-card">
+        <h1>Вход в админ-панель</h1>
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="login">Логин</label>
+                <input type="text" id="login" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Пароль</label>
+                <input type="password" id="password" class="form-control" required>
+            </div>
+            <button type="submit" class="btn">Войти</button>
+            <p id="errorMessage" class="error-message">Неверный логин или пароль</p>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const loginInput = document.getElementById('login').value;
+            const passwordInput = document.getElementById('password').value;
+            const errorMessage = document.getElementById('errorMessage');
+
+            // ВАЖНО: В реальном проекте эти данные никогда не должны быть в коде!
+            // Они должны проверяться на сервере (PHP).
+            const CORRECT_LOGIN = 'admin';
+            const CORRECT_PASS = '12345';
+
+            if (loginInput === CORRECT_LOGIN && passwordInput === CORRECT_PASS) {
+                // Сохраняем "сессию" в sessionStorage.
+                // sessionStorage очищается при закрытии вкладки браузера.
+                sessionStorage.setItem('isAdminAuthenticated', 'true');
+                
+                // Перенаправляем на админ-панель
+                window.location.href = 'admin.html';
+            } else {
+                errorMessage.style.display = 'block';
+            }
+        });
+    </script>
+
+</body>
+</html>
