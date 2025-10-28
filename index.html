@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tbil Home Hostel – Your Home in Tbilisi</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #046bd2;
+            --primary-dark: #045cb4;
+            --text-dark: #1e293b;
+            --text-medium: #334155;
+            --light-bg: #f9fafb;
+            --white: #ffffff;
+            --border: #e2e8f0;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --radius: 8px;
+            --transition: all 0.3s ease;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Inter', sans-serif; color: var(--text-medium); line-height: 1.6; overflow-x: hidden; }
+        h1, h2, h3, h4, h5, h6 { color: var(--text-dark); font-weight: 600; line-height: 1.3; }
+        .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        section { padding: 80px 0; scroll-margin-top: 80px; }
+        .btn { display: inline-block; background-color: var(--primary); color: var(--white); padding: 12px 28px; border-radius: var(--radius); text-decoration: none; font-weight: 500; transition: var(--transition); border: none; cursor: pointer; }
+        .btn:hover { background-color: var(--primary-dark); transform: translateY(-2px); }
+        .btn-outline { background-color: transparent; border: 1px solid var(--primary); color: var(--primary); }
+        .btn-outline:hover { background-color: var(--primary); color: var(--white); }
+        header { position: fixed; top: 0; left: 0; width: 100%; background-color: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); z-index: 1000; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); transition: var(--transition); }
+        header.scrolled { box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1); }
+        .header-container { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; }
+        .logo img { height: 50px; }
+        .nav-menu { display: flex; list-style: none; }
+        .nav-menu li { margin-left: 30px; }
+        .nav-menu a { text-decoration: none; color: var(--text-dark); font-weight: 500; transition: var(--transition); position: relative; }
+        .nav-menu a:hover { color: var(--primary); }
+        .nav-menu a::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 0; height: 2px; background-color: var(--primary); transition: var(--transition); }
+        .nav-menu a:hover::after { width: 100%; }
+        .mobile-menu-btn { display: none; background: none; border: none; font-size: 1.5rem; color: var(--text-dark); cursor: pointer; }
+        .hero { height: 100vh; background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('https://tbilhome.com/wp-content/uploads/2023/01/19029470_1419408268120543_3062914836182514011_n-2.jpg'); background-size: cover; background-position: center; display: flex; align-items: center; color: var(--white); text-align: center; position: relative; }
+        .hero-content { max-width: 800px; margin: 0 auto; padding: 0 20px; }
+        .hero h1 { font-size: 3.5rem; margin-bottom: 20px; color: var(--white); line-height: 1.2; }
+        .hero p { font-size: 1.2rem; margin-bottom: 30px; opacity: 0.9; }
+        .scroll-indicator { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); animation: bounce 2s infinite; }
+        @keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0) translateX(-50%); } 40% { transform: translateY(-10px) translateX(-50%); } 60% { transform: translateY(-5px) translateX(-50%); } }
+        .facilities { background-color: var(--light-bg); }
+        .section-header { text-align: center; margin-bottom: 60px; }
+        .section-header h2 { font-size: 2.5rem; margin-bottom: 15px; }
+        .section-header p { max-width: 600px; margin: 0 auto; color: var(--text-medium); }
+        .facilities-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
+        .facility-card { background-color: var(--white); border-radius: var(--radius); padding: 30px; text-align: center; box-shadow: var(--shadow); transition: var(--transition); }
+        .facility-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); }
+        .facility-icon { font-size: 2.5rem; color: var(--primary); margin-bottom: 20px; }
+        .facility-card h3 { margin-bottom: 10px; }
+        .rooms-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+        .room-card { background-color: var(--white); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); transition: var(--transition); display: flex; flex-direction: column; }
+        .room-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1); }
+        .room-image { height: 200px; overflow: hidden; }
+        .room-image img { width: 100%; height: 100%; object-fit: cover; transition: var(--transition); }
+        .room-card:hover .room-image img { transform: scale(1.05); }
+        .room-content { padding: 25px; display: flex; flex-direction: column; flex-grow: 1; }
+        .room-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
+        .room-title { font-size: 1.3rem; margin-bottom: 5px; }
+        .room-price { font-weight: 600; color: var(--primary); font-size: 1.2rem; white-space: nowrap; margin-left: 10px; }
+        .room-features { list-style: none; margin-bottom: 20px; flex-grow: 1; }
+        .room-features li { display: flex; align-items: center; margin-bottom: 8px; }
+        .room-features i { color: var(--primary); margin-right: 10px; width: 16px; }
+        .about { background-color: var(--light-bg); }
+        .about-content { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; }
+        .about-text h2 { margin-bottom: 20px; }
+        .about-text p { margin-bottom: 15px; }
+        .about-image { border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
+        .about-image img { width: 100%; height: auto; display: block; }
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; }
+        .gallery-item { border-radius: var(--radius); overflow: hidden; height: 250px; position: relative; }
+        .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: var(--transition); }
+        .gallery-item:hover img { transform: scale(1.05); }
+        .contact-content { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; }
+        .contact-info { display: flex; flex-direction: column; gap: 25px; }
+        .contact-item { display: flex; align-items: flex-start; }
+        .contact-icon { background-color: var(--light-bg); color: var(--primary); width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; flex-shrink: 0; }
+        .contact-details h4 { margin-bottom: 5px; }
+        .contact-form { background-color: var(--light-bg); padding: 30px; border-radius: var(--radius); }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 500; }
+        .form-control { width: 100%; padding: 12px 15px; border: 1px solid var(--border); border-radius: var(--radius); font-family: 'Inter', sans-serif; transition: var(--transition); }
+        .form-control:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(4, 107, 210, 0.1); }
+        footer { background-color: var(--text-dark); color: var(--white); padding: 60px 0 30px; }
+        .footer-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; margin-bottom: 40px; }
+        .footer-logo img { height: 50px; margin-bottom: 15px; }
+        .footer-about p { margin-bottom: 20px; opacity: 0.8; }
+        .footer-links h4, .footer-contact h4 { margin-bottom: 20px; font-size: 1.2rem; }
+        .footer-links ul { list-style: none; }
+        .footer-links li { margin-bottom: 10px; }
+        .footer-links a { color: var(--white); text-decoration: none; opacity: 0.8; transition: var(--transition); }
+        .footer-links a:hover { opacity: 1; color: var(--primary); }
+        .footer-contact p { margin-bottom: 10px; opacity: 0.8; display: flex; align-items: center; }
+        .footer-contact i { margin-right: 10px; color: var(--primary); }
+        .social-links { display: flex; gap: 15px; margin-top: 20px; }
+        .social-links a { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; background-color: rgba(255, 255, 255, 0.1); border-radius: 50%; color: var(--white); text-decoration: none; transition: var(--transition); }
+        .social-links a:hover { background-color: var(--primary); transform: translateY(-3px); }
+        .footer-bottom { text-align: center; padding-top: 30px; border-top: 1px solid rgba(255, 255, 255, 0.1); opacity: 0.7; font-size: 0.9rem; }
+        
+        /* По умолчанию слайдер скрыт */
+        .facilities-slider, .slider-dots {
+            display: none;
+        }
+
+        @media (max-width: 992px) { .about-content, .contact-content { grid-template-columns: 1fr; } .hero h1 { font-size: 2.8rem; } }
+        
+        @media (max-width: 768px) {
+            .header-container {
+                padding: 15px 0;
+            }
+            .mobile-menu-btn { 
+                display: block; 
+                background: none; 
+                border: none; 
+                font-size: 1.5rem; 
+                color: var(--text-dark); 
+                cursor: pointer;
+                margin-right: 20px;
+                padding: 8px;
+                transition: var(--transition);
+            }
+            .mobile-menu-btn:hover {
+                color: var(--primary);
+                transform: scale(1.1);
+            }
+            .nav-menu { position: fixed; top: 0; right: 0; width: 300px; max-width: 80%; height: 100vh; background-color: var(--white); flex-direction: column; align-items: flex-start; padding: 100px 40px; box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1); transform: translateX(100%); transition: transform 0.4s ease-in-out; z-index: 999; } .nav-menu.active { transform: translateX(0); } .nav-menu li { margin: 15px 0; margin-left: 0; } .hero h1 { font-size: 2.2rem; } section { padding: 60px 0; }
+            
+            /* Слайдер для Facilities на мобильных (Fade-эффект) */
+            .facilities-grid {
+                display: none;
+            }
+            .facilities-slider {
+                display: block;
+                position: relative;
+                width: 100%;
+                height: 300px;
+                overflow: hidden;
+            }
+            .facilities-slides {
+                position: relative;
+                width: 100%;
+                height: 100%;
+            }
+            .facility-slide {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                /* Улучшенная анимация */
+                opacity: 0;
+                transform: scale(0.95);
+                transition: opacity 0.7s ease-in-out, transform 0.7s ease-in-out;
+                pointer-events: none;
+            }
+            .facility-slide.visible {
+                opacity: 1;
+                transform: scale(1);
+                pointer-events: auto;
+                z-index: 2;
+            }
+            .facility-slide .facility-card {
+                width: 100%; /* Карточка занимает всю ширину слайда */
+                margin: 0;
+            }
+            .slider-dots {
+                display: flex;
+                justify-content: center;
+                gap: 8px;
+                margin-top: 20px;
+            }
+            .dot {
+                width: 8px;
+                height: 8px;
+                border-radius: 50%;
+                background: var(--border);
+                cursor: pointer;
+                transition: var(--transition);
+            }
+            .dot.active {
+                background: var(--primary);
+                transform: scale(1.2);
+            }
+        }
+
+        /* Десктоп хедер улучшения */
+        @media (min-width: 769px) {
+            header {
+                padding: 0;
+                background: linear-gradient(135deg, rgba(255,255,255,0.98) 0%, rgba(255,255,255,0.95) 100%);
+                backdrop-filter: blur(20px);
+                -webkit-backdrop-filter: blur(20px);
+                border-bottom: 1px solid rgba(255,255,255,0.2);
+            }
+            .header-container {
+                padding: 15px 0;
+                position: relative;
+            }
+            .logo img {
+                height: 45px;
+                transition: var(--transition);
+                filter: brightness(1.1);
+            }
+            header.scrolled .logo img {
+                height: 40px;
+            }
+            .nav-menu {
+                position: relative;
+            }
+            .nav-menu li {
+                margin-left: 35px;
+                position: relative;
+            }
+            .nav-menu a {
+                font-weight: 500;
+                font-size: 1rem;
+                padding: 8px 0;
+                color: var(--text-dark);
+                position: relative;
+                transition: var(--transition);
+            }
+            .nav-menu a::before {
+                content: '';
+                position: absolute;
+                bottom: -2px;
+                left: 0;
+                width: 0;
+                height: 2px;
+                background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+                transition: var(--transition);
+                border-radius: 2px;
+            }
+            .nav-menu a:hover::before {
+                width: 100%;
+            }
+            .nav-menu a:hover {
+                color: var(--primary);
+                transform: translateY(-1px);
+            }
+            header.scrolled {
+                padding: 0;
+                background: rgba(255, 255, 255, 0.98);
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            }
+            header.scrolled .nav-menu a {
+                font-size: 0.95rem;
+            }
+        }
+
+        /* Стили модального окна */
+        .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.6); backdrop-filter: blur(5px); }
+        .modal-content { background-color: var(--white); margin: 10% auto; padding: 30px; border-radius: var(--radius); width: 90%; max-width: 500px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); animation: slide-down 0.4s ease-out; }
+        @keyframes slide-down { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
+        .modal-header h2 { font-size: 1.5rem; }
+        .close-btn { color: #aaa; font-size: 28px; font-weight: bold; cursor: pointer; transition: var(--transition); }
+        .close-btn:hover { color: var(--text-dark); transform: rotate(90deg); }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        #bookingMessage { margin-top: 15px; padding: 10px; border-radius: var(--radius); display: none; text-align: center; }
+        #bookingMessage.success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        #bookingMessage.error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .price-breakdown { background: var(--light-bg); padding: 15px; border-radius: var(--radius); margin: 15px 0; }
+        .availability-badge { display: inline-block; padding: 4px 10px; border-radius: 12px; font-size: 0.8rem; font-weight: 600; }
+        .availability-badge.available { background: #d4edda; color: #155724; }
+        .availability-badge.unavailable { background: #f8d7da; color: #721c24; }
+        .calendar-day { padding: 8px; text-align: center; border-radius: 4px; cursor: pointer; transition: var(--transition); }
+        .calendar-day.available:hover { background: var(--primary); color: white; }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header id="header">
+        <div class="container header-container">
+            <div class="logo">
+                <a href="#"><img src="https://tbilhome.com/wp-content/uploads/2023/01/logo1-1-1.png" alt="Tbil Home Hostel"></a>
+            </div>
+            <nav>
+                <ul class="nav-menu" id="navMenu">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#facilities">Facilities</a></li>
+                    <li><a href="#rooms">Rooms</a></li>
+                    <li><a href="#gallery">Gallery</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>Your Home in Tbilisi</h1>
+            <p>Experience authentic Georgian hospitality in the heart of the historic city</p>
+            <a href="#rooms" class="btn">Book Your Stay</a>
+        </div>
+        <div class="scroll-indicator">
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </section>
+
+    <!-- Facilities Section -->
+    <section class="facilities" id="facilities">
+        <div class="container">
+            <div class="section-header">
+                <h2>Our Facilities</h2>
+                <p>Everything you need for a comfortable stay in Tbilisi</p>
+            </div>
+            <div class="facilities-grid">
+                 <div class="facility-card">
+                    <div class="facility-icon"><i class="fas fa-wifi"></i></div>
+                    <h3>High-Speed WiFi</h3>
+                    <p>Stay connected with our fast and reliable internet</p>
+                </div>
+                <div class="facility-card">
+                    <div class="facility-icon"><i class="fas fa-snowflake"></i></div>
+                    <h3>Air Conditioning</h3>
+                    <p>Comfort in any season with climate control</p>
+                </div>
+                <div class="facility-card">
+                    <div class="facility-icon"><i class="fas fa-utensils"></i></div>
+                    <h3>Fully Equipped Kitchen</h3>
+                    <p>Prepare your own meals with our modern kitchen</p>
+                </div>
+                <div class="facility-card">
+                    <div class="facility-icon"><i class="fas fa-tv"></i></div>
+                    <h3>Common Area with TV</h3>
+                    <p>Relax and socialize in our comfortable lounge</p>
+                </div>
+                <div class="facility-card">
+                    <div class="facility-icon"><i class="fas fa-tshirt"></i></div>
+                    <h3>Laundry Service</h3>
+                    <p>Keep your clothes fresh during your travels</p>
+                </div>
+                <div class="facility-card">
+                    <div class="facility-icon"><i class="fas fa-map-marked-alt"></i></div>
+                    <h3>Prime Location</h3>
+                    <p>In the historic center, close to all attractions</p>
+                </div>
+            </div>
+            <!-- Mobile Slider (скрыт на десктопе) -->
+            <div class="facilities-slider" id="facilitiesSlider">
+              <div class="facilities-slides" id="facilitiesSlides">
+                <!-- Слайды будут заполнены через JavaScript -->
+              </div>
+            </div>
+            <div class="slider-dots" id="sliderDots">
+              <!-- Точки будут добавлены через JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Rooms Section -->
+    <section class="rooms" id="rooms">
+        <div class="container">
+            <div class="section-header">
+                <h2>Our Rooms</h2>
+                <p>Choose the perfect accommodation for your Tbilisi adventure</p>
+            </div>
+            <div class="rooms-grid" id="roomsGrid">
+                <!-- Карточки номеров будут вставлены сюда -->
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text" id="aboutTextContainer">
+                    <h2>Our Hostel</h2>
+                    <!-- Параграфы будут вставлены сюда из JS -->
+                </div>
+                <div class="about-image">
+                    <img src="https://tbilhome.com/wp-content/uploads/2023/01/1111.jpg" alt="Tbilhome Hostel">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section class="gallery" id="gallery">
+        <div class="container">
+            <div class="section-header">
+                <h2>Gallery</h2>
+                <p>Take a look at our comfortable spaces and facilities</p>
+            </div>
+            <div class="gallery-grid" id="galleryGrid">
+                <!-- Изображения будут вставлены сюда -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+        <div class="container">
+            <div class="section-header">
+                <h2>Contact Us</h2>
+                <p>We'd love to hear from you. Reach out with any questions or for booking inquiries.</p>
+            </div>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+                        <div class="contact-details">
+                            <h4>Our Address</h4>
+                            <p>Tbilisi, Irgvlivi Turn 1</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon"><i class="fas fa-phone-alt"></i></div>
+                        <div class="contact-details">
+                            <h4>Phone Number</h4>
+                            <p>+995 551 422 415</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+                        <div class="contact-details">
+                            <h4>Email Address</h4>
+                            <p>info@tbilhome.com</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="contact-form">
+                    <form>
+                        <div class="form-group">
+                            <label for="contactName">Name</label>
+                            <input type="text" id="contactName" class="form-control" placeholder="Your Name">
+                        </div>
+                        <div class="form-group">
+                            <label for="contactEmail">Email</label>
+                            <input type="email" id="contactEmail" class="form-control" placeholder="Your Email">
+                        </div>
+                        <div class="form-group">
+                            <label for="contactMessage">Message</label>
+                            <textarea id="contactMessage" class="form-control" rows="5" placeholder="Your Message"></textarea>
+                        </div>
+                        <button type="submit" class="btn">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="pageFooter">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-about">
+                    <div class="footer-logo">
+                        <img src="https://tbilhome.com/wp-content/uploads/2023/01/logo1-1-1.png" alt="Tbil Home Hostel">
+                    </div>
+                    <p>Your home away from home in the heart of Tbilisi. Experience Georgian hospitality at its finest.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-whatsapp"></i></a>
+                        <a href="#"><i class="fab fa-telegram"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#facilities">Facilities</a></li>
+                        <li><a href="#rooms">Rooms</a></li>
+                        <li><a href="#gallery">Gallery</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h4>Contact Info</h4>
+                    <p><i class="fas fa-map-marker-alt"></i> Tbilisi, Irgvlivi Turn 1</p>
+                    <p><i class="fas fa-phone-alt"></i> +995 551 422 415</p>
+                    <p><i class="fas fa-envelope"></i> info@tbilhome.com</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 Tbil Home Hostel. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Модальное окно для бронирования -->
+    <div id="bookingModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalRoomTitle">Бронирование номера</h2>
+                <span class="close-btn" id="closeBookingModal">&times;</span>
+            </div>
+            <form id="bookingForm">
+                <input type="hidden" id="bookingRoomId">
+                <div class="form-group">
+                    <label for="userName">Ваше имя</label>
+                    <input type="text" id="userName" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="userEmail">Email для подтверждения</label>
+                    <input type="email" id="userEmail" class="form-control" required>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="checkInDate">Дата заезда</label>
+                        <input type="date" id="checkInDate" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="checkOutDate">Дата выезда</label>
+                        <input type="date" id="checkOutDate" class="form-control" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="guests">Количество гостей</label>
+                    <input type="number" id="guests" class="form-control" min="1" value="1" required>
+                </div>
+                <div id="priceCalculation" class="price-breakdown" style="display: none;"></div>
+                <button type="submit" class="btn" style="width: 100%;">Проверить и забронировать</button>
+                <div id="bookingMessage"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Модальное окно календаря доступности -->
+    <div id="availabilityModal" class="modal">
+        <div class="modal-content" style="max-width: 800px;">
+            <div class="modal-header">
+                <h2>Календарь доступности</h2>
+                <span class="close-btn" id="closeAvailabilityModal">&times;</span>
+            </div>
+            <div id="calendarContainer" style="max-height: 400px; overflow-y: auto;"></div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+    <script>
+    // Слайдер для Facilities (мобильная версия)
+    function initFacilitiesSlider() {
+      const slider = document.getElementById('facilitiesSlider');
+      const slidesContainer = document.getElementById('facilitiesSlides');
+      const dotsContainer = document.getElementById('sliderDots');
+      
+      if (!slider) return;
+      
+      const facilities = [
+        { icon: '<i class="fas fa-wifi"></i>', title: 'High-Speed WiFi', text: 'Stay connected with our fast and reliable internet' },
+        { icon: '<i class="fas fa-snowflake"></i>', title: 'Air Conditioning', text: 'Comfort in any season with climate control' },
+        { icon: '<i class="fas fa-utensils"></i>', title: 'Fully Equipped Kitchen', text: 'Prepare your own meals with our modern kitchen' },
+        { icon: '<i class="fas fa-tv"></i>', title: 'Common Area with TV', text: 'Relax and socialize in our comfortable lounge' },
+        { icon: '<i class="fas fa-tshirt"></i>', title: 'Laundry Service', text: 'Keep your clothes fresh during your travels' },
+        { icon: '<i class="fas fa-map-marked-alt"></i>', title: 'Prime Location', text: 'In the historic center, close to all attractions' }
+      ];
+      
+      let currentSlide = 0;
+      
+      // Заполняем слайды
+      slidesContainer.innerHTML = facilities.map((facility, index) => `
+        <div class="facility-slide ${index === 0 ? 'visible' : ''}">
+          <div class="facility-card">
+            <div class="facility-icon">${facility.icon}</div>
+            <h3>${facility.title}</h3>
+            <p>${facility.text}</p>
+          </div>
+        </div>
+      `).join('');
+      
+      // Создаем точки
+      dotsContainer.innerHTML = facilities.map((_, index) => `
+        <span class="dot ${index === 0 ? 'active' : ''}" data-slide="${index}"></span>
+      `).join('');
+      
+      const allSlides = document.querySelectorAll('.facility-slide');
+      const allDots = document.querySelectorAll('.dot');
+
+      // Функция обновления слайдера
+      function updateSlider() {
+        allSlides.forEach(slide => slide.classList.remove('visible'));
+        allSlides[currentSlide].classList.add('visible');
+        
+        allDots.forEach(dot => dot.classList.remove('active'));
+        allDots[currentSlide].classList.add('active');
+      }
+      
+      // Обработчики точек
+      dotsContainer.addEventListener('click', (e) => {
+        if (e.target.classList.contains('dot')) {
+            currentSlide = parseInt(e.target.dataset.slide);
+            updateSlider();
+        }
+      });
+      
+      // Свайп для мобильных
+      let startX = 0;
+      slider.addEventListener('touchstart', (e) => { startX = e.touches[0].clientX; });
+      slider.addEventListener('touchend', (e) => {
+        const endX = e.changedTouches[0].clientX;
+        const diff = startX - endX;
+        if (Math.abs(diff) > 50) {
+          if (diff > 0) { // Свайп влево
+            currentSlide = (currentSlide + 1) % facilities.length;
+          } else { // Свайп вправо
+            currentSlide = (currentSlide - 1 + facilities.length) % facilities.length;
+          }
+          updateSlider();
+        }
+      });
+      
+      // Автопрокрутка
+      let autoSlideInterval = setInterval(() => {
+        currentSlide = (currentSlide + 1) % facilities.length;
+        updateSlider();
+      }, 4000);
+      
+      slider.addEventListener('mouseenter', () => clearInterval(autoSlideInterval));
+      slider.addEventListener('mouseleave', () => {
+        autoSlideInterval = setInterval(() => {
+          currentSlide = (currentSlide + 1) % facilities.length;
+          updateSlider();
+        }, 4000);
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // ВАШ УНИКАЛЬНЫЙ КОНФИГУРАЦИОННЫЙ ОБЪЕКТ FIREBASE
+        const firebaseConfig = {
+            apiKey: "AIzaSyCZZ7kICCJMcWAjW5bnf_-vsH2s-KoZrSs",
+            authDomain: "tbil-home.firebaseapp.com",
+            projectId: "tbil-home",
+            storageBucket: "tbil-home.firebasestorage.app",
+            messagingSenderId: "849747940427",
+            appId: "1:849747940427:web:bd3744d816a25e62c7e9ce",
+            measurementId: "G-7YWSRMGV33"
+        };
+
+        // Инициализация Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        let allRooms = [];
+        let allBookings = [];
+
+        const bookingModal = document.getElementById('bookingModal');
+        const closeBookingModalBtn = document.getElementById('closeBookingModal');
+        const bookingForm = document.getElementById('bookingForm');
+        const modalRoomTitle = document.getElementById('modalRoomTitle');
+        const bookingRoomIdInput = document.getElementById('bookingRoomId');
+        const bookingMessage = document.getElementById('bookingMessage');
+        const checkInDateInput = document.getElementById('checkInDate');
+        const checkOutDateInput = document.getElementById('checkOutDate');
+        const priceCalculation = document.getElementById('priceCalculation');
+        const availabilityModal = document.getElementById('availabilityModal');
+        const closeAvailabilityModalBtn = document.getElementById('closeAvailabilityModal');
+
+        const getRoomById = (roomId) => allRooms.find(r => r.id === roomId);
+
+        function getAvailableSpotsForDate(roomId, dateStr) {
+            const room = getRoomById(roomId);
+            if (!room) return 0;
+            const targetDate = new Date(dateStr);
+            let bookedGuests = 0;
+            for (const booking of allBookings) {
+                if (booking.roomId !== roomId) continue;
+                const bookingStart = new Date(booking.checkInDate);
+                const bookingEnd = new Date(booking.checkOutDate);
+                if (targetDate >= bookingStart && targetDate < bookingEnd) {
+                    bookedGuests += (booking.guests || 1);
+                }
+            }
+            return room.capacity - bookedGuests;
+        }
+
+        function isRoomAvailable(roomId, checkInStr, checkOutStr, requestedGuests) {
+            const checkInDate = new Date(checkInStr);
+            const checkOutDate = new Date(checkOutStr);
+            for (let d = new Date(checkInDate); d < checkOutDate; d.setDate(d.getDate() + 1)) {
+                const dateStr = d.toISOString().split('T')[0];
+                const availableSpots = getAvailableSpotsForDate(roomId, dateStr);
+                if (availableSpots < requestedGuests) {
+                    const dateForMessage = d.toLocaleDateString('ru-RU');
+                    bookingMessage.textContent = `На ${dateForMessage} не хватает мест. Свободно: ${availableSpots}, требуется: ${requestedGuests}.`;
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        function calculateTotalPrice(roomId, checkInDate, checkOutDate, guests) {
+            const room = getRoomById(roomId);
+            if (!room || !checkInDate || !checkOutDate || !guests || guests < 1) return 0;
+            const start = new Date(checkInDate);
+            const end = new Date(checkOutDate);
+            if (end <= start) return 0;
+            const nights = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
+            return room.price * nights * guests;
+        }
+
+        function updatePriceCalculation() {
+            const roomId = bookingRoomIdInput.value;
+            const checkInDate = checkInDateInput.value;
+            const checkOutDate = checkOutDateInput.value;
+            const guests = parseInt(document.getElementById('guests').value);
+            if (roomId && checkInDate && checkOutDate && guests > 0) {
+                const price = calculateTotalPrice(roomId, checkInDate, checkOutDate, guests);
+                const start = new Date(checkInDate);
+                const end = new Date(checkOutDate);
+                const nights = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
+                const room = getRoomById(roomId);
+                priceCalculation.innerHTML = `
+                    <strong>Детали бронирования:</strong><br>
+                    • Цена за место/ночь: ${room ? room.price : 0} GEL<br>
+                    • Количество гостей: ${guests}<br>
+                    • Количество ночей: ${nights}<br>
+                    • <strong>Итого: ${price} GEL</strong>
+                `;
+                priceCalculation.style.display = 'block';
+            } else {
+                priceCalculation.style.display = 'none';
+            }
+        }
+
+        function setupDateValidation() {
+            const today = new Date();
+            const maxDate = new Date();
+            maxDate.setFullYear(today.getFullYear() + 1);
+            checkInDateInput.setAttribute('min', today.toISOString().split('T')[0]);
+            checkInDateInput.setAttribute('max', maxDate.toISOString().split('T')[0]);
+            checkOutDateInput.setAttribute('max', maxDate.toISOString().split('T')[0]);
+            checkInDateInput.addEventListener('change', function() {
+                if (this.value) {
+                    const nextDay = new Date(this.value);
+                    nextDay.setDate(nextDay.getDate() + 1);
+                    checkOutDateInput.min = nextDay.toISOString().split('T')[0];
+                    if (checkOutDateInput.value <= this.value) {
+                        checkOutDateInput.value = nextDay.toISOString().split('T')[0];
+                    }
+                    updatePriceCalculation();
+                }
+            });
+            checkOutDateInput.addEventListener('change', updatePriceCalculation);
+            document.getElementById('guests').addEventListener('change', updatePriceCalculation);
+        }
+
+        window.openBookingModal = (roomId) => {
+            const room = getRoomById(roomId);
+            if (!room) { alert('Ошибка: номер не найден.'); return; }
+            modalRoomTitle.textContent = `Бронирование: ${room.title}`;
+            bookingRoomIdInput.value = roomId;
+            bookingForm.reset();
+            bookingMessage.style.display = 'none';
+            priceCalculation.style.display = 'none';
+            const today = new Date(), tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            checkInDateInput.value = today.toISOString().split('T')[0];
+            checkOutDateInput.value = tomorrow.toISOString().split('T')[0];
+            const guestsInput = document.getElementById('guests');
+            guestsInput.setAttribute('max', room.capacity);
+            guestsInput.setAttribute('title', `Максимум: ${room.capacity} гостей`);
+            bookingModal.style.display = 'block';
+            setupDateValidation();
+            updatePriceCalculation();
+        };
+
+        window.showDailyAvailability = (roomId, dateStr) => {
+            const spots = getAvailableSpotsForDate(roomId, dateStr);
+            const formattedDate = new Date(dateStr).toLocaleDateString('ru-RU');
+            alert(`Свободных мест на ${formattedDate}: ${spots}`);
+        };
+
+        function generateMonthCalendar(date, roomId) {
+            const monthNames = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
+            const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+            const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+            let html = `<div class="month-calendar"><h3 style="text-align: center; margin-bottom: 15px;">${monthNames[date.getMonth()]} ${date.getFullYear()}</h3><div class="days-grid" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; font-size: 0.8rem;">`;
+            const dayNames = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
+            dayNames.forEach(day => { html += `<div style="text-align: center; font-weight: bold; padding: 5px;">${day}</div>`; });
+            for (let i = 0; i < (firstDay.getDay() + 6) % 7; i++) { html += `<div style="padding: 8px;"></div>`; }
+            for (let day = 1; day <= lastDay.getDate(); day++) {
+                const currentDate = new Date(date.getFullYear(), date.getMonth(), day);
+                const dateStr = currentDate.toISOString().split('T')[0];
+                const availableSpots = getAvailableSpotsForDate(roomId, dateStr);
+                const isAvailable = availableSpots > 0;
+                const isPast = currentDate < new Date().setHours(0,0,0,0);
+                html += `<div class="calendar-day ${isAvailable && !isPast ? 'available' : ''}" style="padding: 8px; text-align: center; border-radius: 4px; background: ${isPast ? '#f0f0f0' : isAvailable ? '#d4edda' : '#f8d7da'}; color: ${isPast ? '#999' : 'inherit'};" title="${isPast ? 'Прошедшая дата' : isAvailable ? `Свободно: ${availableSpots}` : 'Мест нет'}" onclick="${!isPast ? `showDailyAvailability('${roomId}', '${dateStr}')` : ''}">${day}</div>`;
+            }
+            html += `</div></div>`;
+            return html;
+        }
+
+        function generateAvailabilityCalendar(roomId) {
+            const today = new Date();
+            let calendarHTML = '<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">';
+            for (let m = 0; m < 3; m++) {
+                const month = new Date(today.getFullYear(), today.getMonth() + m, 1);
+                calendarHTML += generateMonthCalendar(month, roomId);
+            }
+            calendarHTML += '</div>';
+            return calendarHTML;
+        }
+
+        window.showAvailabilityCalendar = (roomId) => {
+            const room = getRoomById(roomId);
+            if (!room) return;
+            const container = document.getElementById('calendarContainer');
+            container.innerHTML = generateAvailabilityCalendar(roomId);
+            availabilityModal.style.display = 'block';
+        };
+
+        const closeBookingModal = () => { bookingModal.style.display = 'none'; };
+        const closeAvailabilityModal = () => { availabilityModal.style.display = 'none'; };
+        closeBookingModalBtn.onclick = closeBookingModal;
+        closeAvailabilityModalBtn.onclick = closeAvailabilityModal;
+        window.onclick = (event) => { 
+            if (event.target == bookingModal) closeBookingModal();
+            if (event.target == availabilityModal) closeAvailabilityModal();
+        };
+
+        bookingForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const roomId = bookingRoomIdInput.value;
+            const userName = document.getElementById('userName').value.trim();
+            const userEmail = document.getElementById('userEmail').value.trim();
+            const checkInDate = checkInDateInput.value;
+            const checkOutDate = checkOutDateInput.value;
+            const guests = parseInt(document.getElementById('guests').value);
+            bookingMessage.style.display = 'block';
+            bookingMessage.className = 'error';
+            if (!userName || !userEmail || !checkInDate || !checkOutDate || !guests) { bookingMessage.textContent = 'Пожалуйста, заполните все поля.'; return; }
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userEmail)) { bookingMessage.textContent = 'Пожалуйста, введите корректный email адрес.'; return; }
+            if (new Date(checkOutDate) <= new Date(checkInDate)) { bookingMessage.textContent = 'Дата выезда должна быть позже даты заезда.'; return; }
+            if (guests < 1) { bookingMessage.textContent = 'Количество гостей должно быть не меньше 1.'; return; }
+            const room = getRoomById(roomId);
+            if (guests > room.capacity) { bookingMessage.textContent = `Этот номер вмещает максимум ${room.capacity} гостей.`; return; }
+            if (isRoomAvailable(roomId, checkInDate, checkOutDate, guests)) {
+                const newBooking = { 
+                    id: Date.now(), roomId, userName, userEmail, checkInDate, checkOutDate, guests,
+                    totalPrice: calculateTotalPrice(roomId, checkInDate, checkOutDate, guests),
+                    bookingDate: new Date().toISOString().split('T')[0]
+                };
+                await db.collection('bookings').add(newBooking);
+                allBookings.push(newBooking);
+                bookingMessage.className = 'success';
+                bookingMessage.textContent = 'Номер успешно забронирован! Мы скоро с вами свяжемся.';
+                setTimeout(() => {
+                    closeBookingModal();
+                    window.location.reload();
+                }, 3000);
+            }
+        });
+
+        async function main() {
+            try {
+                initFacilitiesSlider();
+                const roomsSnapshot = await db.collection('rooms').get();
+                allRooms = roomsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                const bookingsSnapshot = await db.collection('bookings').get();
+                allBookings = bookingsSnapshot.docs.map(doc => doc.data());
+                const aboutDoc = await db.collection('settings').doc('about').get();
+                const aboutText = aboutDoc.exists ? aboutDoc.data().text : 'Информация о хостеле скоро появится...';
+                const gallerySnapshot = await db.collection('gallery').get();
+                const galleryImages = gallerySnapshot.docs.map(doc => doc.data());
+                const roomsContainer = document.getElementById('roomsGrid');
+                if (roomsContainer) {
+                    if (allRooms.length === 0) {
+                        roomsContainer.innerHTML = '<p>Информация о номерах в данный момент недоступна.</p>';
+                    } else {
+                        roomsContainer.innerHTML = allRooms.map(room => {
+                            const featuresHTML = (room.description || '').split(',').map(feature => `<li><i class="fas fa-check"></i> ${feature.trim()}</li>`).join('');
+                            const today = new Date().toISOString().split('T')[0];
+                            const availableSpots = getAvailableSpotsForDate(room.id, today);
+                            const isAvailable = availableSpots > 0;
+                            return `
+                                <div class="room-card">
+                                    <div class="room-image"><img src="${room.image}" alt="${room.title}"></div>
+                                    <div class="room-content">
+                                        <div class="room-header">
+                                            <div>
+                                                <h3 class="room-title">${room.title}</h3>
+                                                <span class="availability-badge ${isAvailable ? 'available' : 'unavailable'}">
+                                                    ${isAvailable ? `Свободно: ${availableSpots}` : 'Мест нет'}
+                                                </span>
+                                            </div>
+                                            <div class="room-price">${room.price} GEL</div>
+                                        </div>
+                                        <p style="opacity: 0.8; font-size: 0.9rem; margin-top: -10px; margin-bottom: 15px;">Вместимость: до ${room.capacity} чел.</p>
+                                        <ul class="room-features">${featuresHTML}</ul>
+                                        <div style="display: flex; gap: 10px; margin-top: auto;">
+                                            <button class="btn" onclick="openBookingModal('${room.id}')">Book Now</button>
+                                            <button class="btn btn-outline" onclick="showAvailabilityCalendar('${room.id}')">Check Availability</button>
+                                        </div>
+                                    </div>
+                                </div>`;
+                        }).join('');
+                    }
+                }
+                const aboutContainer = document.getElementById('aboutTextContainer');
+                if (aboutContainer) {
+                    const paragraphsHTML = aboutText.split('\n').map(p => `<p>${p}</p>`).join('');
+                    aboutContainer.innerHTML += paragraphsHTML;
+                }
+                const galleryContainer = document.getElementById('galleryGrid');
+                if (galleryContainer) {
+                    if (galleryImages.length === 0) {
+                        galleryContainer.innerHTML = '<p>Изображения для галереи еще не добавлены.</p>';
+                    } else {
+                        galleryContainer.innerHTML = galleryImages.map(image => `<div class="gallery-item"><img src="${image.url}" alt="Hostel Gallery Image"></div>`).join('');
+                    }
+                }
+            } catch (error) {
+                console.error("Ошибка при загрузке данных с Firebase:", error);
+                const roomsContainer = document.getElementById('roomsGrid');
+                if (roomsContainer) roomsContainer.innerHTML = '<p style="color: red;">Не удалось загрузить данные. Пожалуйста, попробуйте обновить страницу.</p>';
+            }
+        }
+        main();
+    });
+    </script>
+    
+    <!-- Скрипт для меню и скролла -->
+    <script>
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const navMenu = document.getElementById('navMenu');
+        mobileMenuBtn.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            mobileMenuBtn.innerHTML = navMenu.classList.contains('active') ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+        });
+
+        const header = document.getElementById('header');
+        window.addEventListener('scroll', () => {
+            header.classList.toggle('scrolled', window.scrollY > 100);
+        });
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({ top: targetElement.offsetTop - 80, behavior: 'smooth' });
+                    if (navMenu.classList.contains('active')) {
+                        navMenu.classList.remove('active');
+                        mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+                    }
+                }
+            });
+        });
+    </script>
+
+    <!-- Скрипт для входа в админку -->
+    <script>
+        const footer = document.getElementById('pageFooter');
+        let clickCount = 0;
+        let clickTimer = null;
+        footer.addEventListener('click', () => {
+            clickCount++;
+            clearTimeout(clickTimer);
+            if (clickCount === 3) {
+                window.location.href = 'admin.html';
+                clickCount = 0;
+            } else {
+                clickTimer = setTimeout(() => { clickCount = 0; }, 800);
+            }
+        });
+    </script>
+</body>
+</html>
